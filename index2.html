@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>range slider</title>
+
+    <style>
+        .range-track {
+            height: 5px;
+            position: relative;
+            background-color: #e1e9f6;
+            border-radius: 2px;
+        }
+
+        .slider-range {
+            height: 100%;
+            left: 30%;
+            right: 30%;
+            position: absolute;
+            border-radius: 5px;
+            background-color: #1b53c0;
+        }
+
+        .range-input {
+            position: relative;
+        }
+
+        .range-input input {
+            position: absolute;
+            width: 100%;
+            height: 5px;
+            top: -7px;
+            background: none;
+            pointer-events: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+
+        .range-input input::-webkit-slider-thumb {
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            border: 3px solid #1b53c0;
+            background-color: #fff;
+            pointer-events: auto;
+            -webkit-appearance: none;
+        }
+
+        .range-input input::-moz-range-thumb {
+            height: 15px;
+            width: 15px;
+            border-radius: 50%;
+            border: 3px solid #1b53c0;
+            background-color: #fff;
+            pointer-events: auto;
+            -moz-appearance: none;
+        }
+
+        .slider-value-input {
+            margin: 30px 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slider-value-input label {
+            margin-right: 5px;
+        }
+
+        .slider-value-input input {
+            width: 40px;
+            padding: 5px;
+        }
+
+        .slider-value-input input:first-of-type {
+            margin-right: 15px;
+        }
+
+        .slider-labels {
+            max-width: 800px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .slider-labels span {
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="range">
+        <div class="range-track">
+            <span class="slider-range"></span>
+        </div>
+        <div class="range-input">
+            <input type="range" class="min" min="0" max="1000" value="300" step="10">
+            <input type="range" class="max" min="0" max="1000" value="700" step="10">
+        </div>
+
+
+        <div class="slider-labels slider-value-input">
+            <span>
+                <label for="min">Min</label>
+                <input type="number" name="min" value="300">
+            </span>
+
+            <span>
+                <label for="max">Max</label>
+                <input type="number" name="max" value="700">
+            </span>
+        </div>
+
+
+        <div class="slider-labels">
+            <span class="min-label">25</span>
+            <span class="max-label">75</span>
+        </div>
+    </div>
+
+    <script>
+
+        const minInput = document.querySelector('.min');
+        const maxInput = document.querySelector('.max');
+        const minLabel = document.querySelector('.min-label');
+        const maxLabel = document.querySelector('.max-label');
+        const sliderRange = document.querySelector('.slider-range');
+
+        function updateSlider() {
+            let minVal = parseInt(minInput.value);
+            let maxVal = parseInt(maxInput.value);
+
+            if (minVal > maxVal) {
+                if (this === minInput) {
+                    maxVal = minVal;
+                    maxInput.value = maxVal;
+                } else {
+                    minVal = maxVal;
+                    minInput.value = minVal;
+                }
+            }
+
+            minLabel.textContent = minVal;
+            maxLabel.textContent = maxVal;
+
+            const minPercent = ((minVal - minInput.min) / (minInput.max - minInput.min)) * 100;
+            const maxPercent = ((maxVal - minInput.min) / (minInput.max - minInput.min)) * 100;
+
+            sliderRange.style.left = `${minPercent}%`;
+            sliderRange.style.width = `${maxPercent - minPercent}%`;
+        }
+
+        minInput.addEventListener('input', updateSlider);
+        maxInput.addEventListener('input', updateSlider);
+
+        updateSlider(); // Initial call to set up the slider
+    </script>
+</body>
+
+</html>
